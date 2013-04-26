@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "REMEMBER TO SHUT DOWN THE MAIN DNS SERVER!!!"
+/root/defuse_failover/alert/alert.sh repeat /root/defuse_failover/alert/sounds/Hailing.mp3
 
 ORIGINAL_IP=$(egrep "^\s*A" /var/named/db.defuse | rev | cut -f 1 | rev)
 BACKUP_IP=$(host -t A failover.defuse.ca | cut -d " " -f 4)
@@ -31,4 +31,6 @@ chown root:root /var/named
 
 service bind9 restart
 
+# Stop the main DNS server so all requests come here.
+ssh root@site-one.defuse.ca "service bind9 stop"
 
