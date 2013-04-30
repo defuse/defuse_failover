@@ -10,7 +10,7 @@ def printUsage( msg )
 end
 
 if ARGV.length < 1
-  printUsage "Please give a <directory>."
+  printUsage "Please provide a <directory>."
 end
 
 path = ARGV[0]
