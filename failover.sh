@@ -10,9 +10,12 @@ if [ -f "/var/named/db.defuse.before-fail" ]; then
     echo "defuse.ca config backup already exists. Exiting."
     exit 1
 fi
+ORIGINAL_SERIAL=$(grep "serial" /var/named/db.defuse | cut -d ';' -f 1 | sed 's/\s//g')
+NEXT_SERIAL=$(expr $ORIGINAL_SERIAL + 1)
 cp /var/named/db.defuse /var/named/db.defuse.before-fail
 sed -i -r "s/^(\\s*A\\s+)$ORIGINAL_IP/\1 $BACKUP_IP/g" /var/named/db.defuse
 sed -i 's/.*$TTL.*/$TTL 600/' /var/named/db.defuse
+sed -i "s/${ORIGINAL_SERIAL}.*serial/${NEXT_SERIAL}/" /var/named/db.defuse
 chown root:root /var/named/db.defuse
 chmod 444 /var/named/db.defuse
 
@@ -21,9 +24,12 @@ if [ -f "/var/named/db.crackstation.before-fail" ]; then
     echo "crackstation.net config backup already exists. Exiting."
     exit 1
 fi
+ORIGINAL_SERIAL=$(grep "serial" /var/named/db.crackstation | cut -d ';' -f 1 | sed 's/\s//g')
+NEXT_SERIAL=$(expr $ORIGINAL_SERIAL + 1)
 cp /var/named/db.crackstation /var/named/db.crackstation.before-fail
 sed -i -r "s/^(\\s*A\\s+)$ORIGINAL_IP/\1 $BACKUP_IP/g" /var/named/db.crackstation
 sed -i 's/.*$TTL.*/$TTL 600/' /var/named/db.crackstation
+sed -i "s/${ORIGINAL_SERIAL}.*serial/${NEXT_SERIAL}/" /var/named/db.crackstation
 chown root:root /var/named/db.defuse
 chmod 444 /var/named/db.crackstation
 
